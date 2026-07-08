@@ -1,5 +1,4 @@
 import 'package:authentication_app/screens/auth_gate.dart';
-import 'package:authentication_app/screens/login_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 

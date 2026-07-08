@@ -1,11 +1,15 @@
 import 'package:authentication_app/models/user_model.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class AuthRepository {
   Future<UserModel> login(String email, String password) async {
-    await Future.delayed(const Duration(seconds: 1));
+    await Future.delayed(const Duration(seconds: 0));
 
-    if (email == "email@test.com" && password == "123") {
-      return UserModel(id: "1", email: email);
+    if (email == "email@email.com" && password == "123") {
+      final user = UserModel(id: "1", email: email);
+
+      await saveUser(user);
+      return user;
     }
     throw Exception("invalid email and password");
   }
@@ -19,7 +23,31 @@ class AuthRepository {
     );
   }
 
+  Future<void> saveUser(UserModel user) async {
+    final prefs = await SharedPreferences.getInstance();
+
+    await prefs.setString("user_id", user.id);
+
+    await prefs.setString("user_email", user.email);
+  }
+
+  Future<UserModel?> getCurrentUser() async {
+    final prefs = await SharedPreferences.getInstance();
+
+    final id = prefs.getString("user_id");
+    final email = prefs.getString("user_email");
+
+    if (id == null || email == null) {
+      return null;
+    }
+
+    return UserModel(id: id, email: email);
+  }
+
   Future<void> logout() async {
-    await Future.delayed(Duration(seconds: 3));
+    final prefs = await SharedPreferences.getInstance();
+
+    await prefs.remove("user_email");
+    await prefs.remove("user_id");
   }
 }

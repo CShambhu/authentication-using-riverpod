@@ -10,6 +10,9 @@ class Auth extends _$Auth {
   @override
   Future<UserModel?> build() async {
     _repository = AuthRepository();
+
+    final user = await _repository.getCurrentUser();
+    return user;
   }
 
   Future<void> login(String email, String password) async {
